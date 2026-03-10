@@ -1,0 +1,147 @@
+{
+  "name": "Sheets to Slack",
+  "nodes": [
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "C0AKQSE5J20",
+          "mode": "list",
+          "cachedResultName": "general"
+        },
+        "text": "=🆕 New Form Submission!\n\n👤 Name: {{ $json['FULL NAME'] }}\n📧 Email: {{ $json['EMAIL'] }}\n💬 Message: {{ $json['MESSAGE'] }}",
+        "otherOptions": {}
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.4,
+      "position": [
+        416,
+        0
+      ],
+      "id": "d55d2a2e-8c35-41c4-8d79-28068d1d7d9c",
+      "name": "Send a message",
+      "webhookId": "593ef443-0bdc-45b5-9ae6-e415c7eaa6ed",
+      "credentials": {
+        "slackOAuth2Api": {
+          "id": "FjHQAO3jx06qk5fw",
+          "name": "Slack account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "documentId": {
+          "__rl": true,
+          "value": "11k9_uuc7bvk7ONmShctEVgBb6bMz3sSLY5m5CRHOkXQ",
+          "mode": "list",
+          "cachedResultName": "Form Submissions",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/11k9_uuc7bvk7ONmShctEVgBb6bMz3sSLY5m5CRHOkXQ/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/11k9_uuc7bvk7ONmShctEVgBb6bMz3sSLY5m5CRHOkXQ/edit#gid=0"
+        },
+        "event": "rowAdded",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTrigger",
+      "typeVersion": 1,
+      "position": [
+        192,
+        0
+      ],
+      "id": "b331bf32-c7bc-4d11-ab1e-b30f7e0db949",
+      "name": "Google Sheets Trigger",
+      "credentials": {
+        "googleSheetsTriggerOAuth2Api": {
+          "id": "fApDn8dYUZFw1oxg",
+          "name": "Google Sheets Trigger account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [
+        624,
+        0
+      ],
+      "id": "392cbacb-e120-4914-aeda-6c1463373e93",
+      "name": "Error Trigger"
+    },
+    {
+      "parameters": {
+        "sendTo": "michealabolaji2@gmail.com",
+        "subject": "Workflow Error: Sheets to Slack Failed",
+        "message": "=Something went wrong in your Sheets to Slack workflow.\n\nError: {{ $json.error.message }}\nTime: {{ $now }}\n\nCheck your n8n dashboard for details.",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        832,
+        0
+      ],
+      "id": "a07945d7-5149-45e5-b64c-04a7347e9908",
+      "name": "Send a message1",
+      "webhookId": "b5359a0e-57e6-4c44-bd0d-8c5467082fe1",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "OAjypNLcNi1uoW5d",
+          "name": "Gmail account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Google Sheets Trigger": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Error Trigger": {
+      "main": [
+        [
+          {
+            "node": "Send a message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "6f0a0c55-5cff-4b28-abbb-fbc00f833d2e",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "9d5402eaf06c1226018dec2665640872096695b4d92c64ee282ed129fa6ff58a"
+  },
+  "id": "Yq6ihRAgSkIn72li",
+  "tags": []
+}
